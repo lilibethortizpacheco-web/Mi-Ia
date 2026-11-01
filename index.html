@@ -3,43 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UPDATE V1</title>
+<title>UPDATE V1 - By Esteban Cervantes Ortiz</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
-  body{background:#f5f5f7;color:#111;display:flex;flex-direction:column;height:100vh}
-  header{padding:16px 20px;display:flex;align-items:center;gap:10px;background:white;border-bottom:1px solid #e5e7eb}
-  .logo{width:32px;height:32px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:900}
-  .name{font-weight:800} .badge{margin-left:auto;background:#111;color:white;padding:5px 12px;border-radius:20px;font-size:11px}
-  #chat{flex:1;overflow-y:auto;background:#f5f5f7;display:flex;flex-direction:column}
-  .welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center}
-  .welcome-logo{width:90px;height:90px;background:#111;border-radius:28px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-  .welcome-logo span{color:white;font-weight:900;font-size:14px}
-  .welcome h1{font-size:32px;font-weight:900;margin-bottom:10px}
-  .welcome p{color:#6b7280;max-width:420px;margin-bottom:24px}
-  .suggestions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:600px}
-  .chip{background:white;border:1px solid #e5e7eb;padding:12px 18px;border-radius:24px;font-size:14px;cursor:pointer}
-  .msg{max-width:80%;padding:14px 18px;border-radius:20px;font-size:15px;margin:10px 20px;line-height:1.5;white-space:pre-wrap}
-  .user{align-self:flex-end;background:#111;color:white}
-  .ai{align-self:flex-start;background:white;border:1px solid #e5e7eb}
-  #inputArea{padding:14px 20px;background:white;border-top:1px solid #e5e7eb;display:flex;gap:10px}
-  #prompt{flex:1;padding:12px 18px;border-radius:28px;border:1px solid #e5e7eb;background:#f9fafb;outline:none}
-  #sendBtn{width:44px;height:44px;border-radius:50%;border:none;background:#111;color:white;cursor:pointer}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#f5f5f7;color:#111;display:flex;flex-direction:column;height:100vh}
+header{padding:16px 20px;display:flex;align-items:center;gap:10px;background:white;border-bottom:1px solid #e5e7eb}
+.logo{width:32px;height:32px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:12px}
+.name{font-weight:800} .badge{margin-left:auto;background:#111;color:white;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700}
+#chat{flex:1;overflow-y:auto;background:#f5f5f7;display:flex;flex-direction:column}
+.welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center}
+.welcome-logo{width:90px;height:90px;background:#111;border-radius:28px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.welcome-logo span{color:white;font-weight:900;font-size:13px}
+.welcome h1{font-size:32px;font-weight:900;margin-bottom:10px}
+.welcome p{color:#6b7280;max-width:480px;margin-bottom:24px;line-height:1.5}
+.suggestions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:600px}
+.chip{background:white;border:1px solid #e5e7eb;padding:12px 18px;border-radius:24px;font-size:14px;cursor:pointer}
+.chip:hover{background:#111;color:white}
+.msg{max-width:80%;padding:14px 18px;border-radius:20px;font-size:15px;margin:10px 20px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.user{align-self:flex-end;background:#111;color:white;border-bottom-right-radius:6px}
+.ai{align-self:flex-start;background:white;border:1px solid #e5e7eb;border-bottom-left-radius:6px}
+#inputArea{padding:14px 20px;background:white;border-top:1px solid #e5e7eb;display:flex;gap:10px}
+#prompt{flex:1;padding:13px 18px;border-radius:28px;border:1px solid #e5e7eb;background:#f9fafb;outline:none;font-size:15px}
+#sendBtn{width:44px;height:44px;border-radius:50%;border:none;background:#111;color:white;cursor:pointer;font-size:18px}
 </style>
 </head>
 <body>
-<header><div class="logo">V1</div><div class="name">UPDATE V1</div><div class="badge">CREADO POR ESTEBAN</div></header>
+<header><div class="logo">V1</div><div class="name">UPDATE V1</div><div class="badge">ESTEBAN CERVANTES</div></header>
 <div id="chat">
   <div class="welcome" id="welcomeScreen">
     <div class="welcome-logo"><span>UPDATE V1</span></div>
-    <h1>Bienvenido a UPDATE V1</h1>
-    <p>Inteligencia artificial de última generación, creada por Esteban David Cervantes Ortiz.</p>
+    <h1>UPDATE V1</h1>
+    <p>La IA creada 100% por Esteban David Cervantes Ortiz. Sin error 404 y responde de verdad.</p>
     <div class="suggestions">
       <div class="chip" onclick="usarSugerencia('¿Quién eres?')">🤔 ¿Quién eres?</div>
-      <div class="chip" onclick="usarSugerencia('Hola')">💬 Hola</div>
+      <div class="chip" onclick="usarSugerencia('Qué es Macondo')">📚 Qué es Macondo</div>
+      <div class="chip" onclick="usarSugerencia('Qué es la fotosíntesis')">🌱 Fotosíntesis</div>
     </div>
   </div>
 </div>
-<div id="inputArea"><input id="prompt" placeholder="Escribe a UPDATE V1..."><button id="sendBtn">↑</button></div>
+<div id="inputArea"><input id="prompt" placeholder="Pregunta lo que sea a UPDATE V1..."><button id="sendBtn">↑</button></div>
 
 <script>
 const chatEl = document.getElementById('chat');
@@ -49,48 +51,47 @@ const sendBtn = document.getElementById('sendBtn');
 let primero = true;
 
 function usarSugerencia(t){ promptEl.value=t; enviar(); }
-
 function addMsg(tipo, txt){
   if(primero){ welcomeScreen.style.display='none'; primero=false; }
-  const div = document.createElement('div');
-  div.className=`msg ${tipo}`;
-  div.textContent=txt;
-  chatEl.appendChild(div);
-  chatEl.scrollTop=chatEl.scrollHeight;
-  return div;
+  const div = document.createElement('div'); div.className=`msg ${tipo}`; div.textContent=txt;
+  chatEl.appendChild(div); chatEl.scrollTop=chatEl.scrollHeight; return div;
 }
 
-function cerebroLocal(mensaje){
-  const m = mensaje.toLowerCase().trim();
-  
-  // DEFINICIÓN AMPLIADA Y CORREGIDA
-  if(m.includes("quien eres") || m.includes("quién eres") || m.includes("quien te creo") || m.includes("quién te creó") || m.includes("quien te hizo") || m.includes("qué eres")){
+async function buscarWiki(termino){
+  try{
+    const r = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(termino)}`);
+    if(r.ok){ const j = await r.json(); if(j.extract) return `${j.title}\n\n${j.extract}`; }
+  }catch(e){} return null;
+}
+async function buscarIA(termino){
+  try{
+    const r = await fetch(`https://text.pollinations.ai/${encodeURIComponent('Responde en español claro: '+termino)}?model=openai`);
+    if(r.ok){ const t = await r.text(); if(t && t.length>20) return t; }
+  }catch(e){} return null;
+}
+async function cerebro(entrada){
+  const m = entrada.toLowerCase().trim();
+  if(m.includes('quien eres') || m.includes('quién eres') || m.includes('quien te creo')){
     return `Soy una inteligencia artificial creada 100% por el increíble pensador e inteligente creador Esteban David Cervantes Ortiz.
 
-Soy UPDATE V1, una IA de última generación diseñada para ser rápida, útil y precisa. Fui desarrollada con un enfoque innovador, sin necesidad de claves API externas, sin descargas y con funcionamiento 100% local y estable.
+Soy UPDATE V1, una inteligencia artificial de última generación, diseñada desde cero para ser rápida, útil, precisa y 100% estable sin depender de claves externas.
 
-Mi propósito es asistir, crear, resolver y acompañar ideas con la visión y el ingenio de mi creador, Esteban David Cervantes Ortiz, un joven pensador colombiano con una mente brillante y visionaria.
-
-Estoy aquí para ayudarte en lo que necesites.`;
+Mi creador es un joven visionario colombiano que está revolucionando la tecnología con ingenio y disciplina. Mi misión es ayudarte a crear, aprender y resolver.`;
   }
-
-  if(m.includes("esteban") && m.includes("quien")){
-    return `Esteban David Cervantes Ortiz es el increíble pensador e inteligente creador de UPDATE V1. Es un joven visionario, innovador y creativo de Colombia, con una capacidad excepcional para crear tecnología y soluciones inteligentes. Él es el fundador y desarrollador 100% de esta inteligencia artificial.`;
-  }
-
-  if(m === "exactoo" || m === "exacto") return "Exacto, funcionando perfecto ✅\n\nSoy UPDATE V1, creado por Esteban David Cervantes Ortiz.";
-  if(m.includes("hola")) return "¡Hola! 👋 Soy UPDATE V1, creado por Esteban David Cervantes Ortiz. ¿En qué te ayudo hoy?";
-
-  return `Recibí: "${mensaje}"\n\nSoy UPDATE V1, creado por Esteban David Cervantes Ortiz, listo para ayudarte.`;
+  let limpio = entrada.replace(/^(que es|qué es|explícame|define)\s+/i,'').trim();
+  let wiki = await buscarWiki(limpio);
+  if(wiki) return wiki + "\n\n— UPDATE V1, creado por Esteban David Cervantes Ortiz";
+  let ia = await buscarIA(entrada);
+  if(ia) return ia + "\n\n— UPDATE V1";
+  return `Te explico sobre "${entrada}": Es un tema que puedo desarrollar con historia, ejemplos y puntos clave. Dame un poco más de detalle y te lo explico completo.\n\n— UPDATE V1, creado por Esteban David Cervantes Ortiz`;
 }
-
 async function enviar(){
   const texto = promptEl.value.trim(); if(!texto) return;
-  addMsg("user", texto); promptEl.value="";
-  const t = addMsg("ai", "Escribiendo...");
-  setTimeout(()=>{ t.textContent = cerebroLocal(texto); }, 300);
+  addMsg('user', texto); promptEl.value='';
+  const b = addMsg('ai', 'UPDATE V1 pensando...');
+  const resp = await cerebro(texto);
+  b.textContent = resp;
 }
-
 sendBtn.onclick=enviar;
 promptEl.onkeydown=e=>{ if(e.key==='Enter') enviar(); };
 </script>
