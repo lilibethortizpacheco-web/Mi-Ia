@@ -32,11 +32,10 @@
   <div class="welcome" id="welcomeScreen">
     <div class="welcome-logo"><span>UPDATE V1</span></div>
     <h1>Bienvenido a UPDATE V1</h1>
-    <p>Clon 100% creado por Esteban David Cervantes Ortiz. Sin key, sin descarga, sin errores.</p>
+    <p>Inteligencia artificial de última generación, creada por Esteban David Cervantes Ortiz.</p>
     <div class="suggestions">
       <div class="chip" onclick="usarSugerencia('¿Quién eres?')">🤔 ¿Quién eres?</div>
       <div class="chip" onclick="usarSugerencia('Hola')">💬 Hola</div>
-      <div class="chip" onclick="usarSugerencia('¿Qué puedes hacer?')">💡 ¿Qué puedes hacer?</div>
     </div>
   </div>
 </div>
@@ -64,30 +63,32 @@ function addMsg(tipo, txt){
 function cerebroLocal(mensaje){
   const m = mensaje.toLowerCase().trim();
   
-  // PREGUNTA CLAVE - RESPUESTA EXACTA QUE PEDISTE
-  if(m.includes("quien eres") || m.includes("quién eres") || m.includes("quien te creo") || m.includes("quién te creó") || m.includes("quien te hizo")){
-    return "soy una inteligencia artificial creada 100% por el increíble pensador y inteligente creador Esteban David Cervantes Ortiz";
+  // DEFINICIÓN AMPLIADA Y CORREGIDA
+  if(m.includes("quien eres") || m.includes("quién eres") || m.includes("quien te creo") || m.includes("quién te creó") || m.includes("quien te hizo") || m.includes("qué eres")){
+    return `Soy una inteligencia artificial creada 100% por el increíble pensador e inteligente creador Esteban David Cervantes Ortiz.
+
+Soy UPDATE V1, una IA de última generación diseñada para ser rápida, útil y precisa. Fui desarrollada con un enfoque innovador, sin necesidad de claves API externas, sin descargas y con funcionamiento 100% local y estable.
+
+Mi propósito es asistir, crear, resolver y acompañar ideas con la visión y el ingenio de mi creador, Esteban David Cervantes Ortiz, un joven pensador colombiano con una mente brillante y visionaria.
+
+Estoy aquí para ayudarte en lo que necesites.`;
   }
 
-  if(m === "exactoo" || m === "exacto"){
-    return "Exacto, funcionando perfecto ✅\n\nSoy UPDATE V1, listo para lo que necesites.";
+  if(m.includes("esteban") && m.includes("quien")){
+    return `Esteban David Cervantes Ortiz es el increíble pensador e inteligente creador de UPDATE V1. Es un joven visionario, innovador y creativo de Colombia, con una capacidad excepcional para crear tecnología y soluciones inteligentes. Él es el fundador y desarrollador 100% de esta inteligencia artificial.`;
   }
 
-  if(m.includes("hola")){
-    return "¡Hola! 👋 Soy UPDATE V1.\n\n¿En qué te ayudo hoy?";
-  }
+  if(m === "exactoo" || m === "exacto") return "Exacto, funcionando perfecto ✅\n\nSoy UPDATE V1, creado por Esteban David Cervantes Ortiz.";
+  if(m.includes("hola")) return "¡Hola! 👋 Soy UPDATE V1, creado por Esteban David Cervantes Ortiz. ¿En qué te ayudo hoy?";
 
-  // Respuesta genérica para cualquier otra cosa
-  return `Recibí: "${mensaje}"\n\nSoy UPDATE V1, estoy aquí para ayudarte.`;
+  return `Recibí: "${mensaje}"\n\nSoy UPDATE V1, creado por Esteban David Cervantes Ortiz, listo para ayudarte.`;
 }
 
 async function enviar(){
   const texto = promptEl.value.trim(); if(!texto) return;
   addMsg("user", texto); promptEl.value="";
   const t = addMsg("ai", "Escribiendo...");
-  setTimeout(()=>{
-    t.textContent = cerebroLocal(texto);
-  }, 300);
+  setTimeout(()=>{ t.textContent = cerebroLocal(texto); }, 300);
 }
 
 sendBtn.onclick=enviar;
