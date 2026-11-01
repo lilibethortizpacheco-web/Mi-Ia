@@ -3,87 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UPDATE V1</title>
+<title>UPDATE V1 - FINAL</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
-  body{background:#f5f5f7;color:#111;display:flex;flex-direction:column;height:100vh}
-  header{padding:16px 20px;display:flex;align-items:center;gap:10px;background:white;border-bottom:1px solid #e5e7eb}
-  .logo{width:32px;height:32px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:900}
-  .name{font-weight:800} .badge{margin-left:auto;background:#111;color:white;padding:5px 12px;border-radius:20px;font-size:11px}
-  #chat{flex:1;overflow-y:auto;background:#f5f5f7;display:flex;flex-direction:column}
+  body{background:black;color:#111;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  #matrix{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.35}
+  header{position:relative;z-index:2;padding:16px 20px;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.92);backdrop-filter:blur(10px);border-bottom:1px solid #e5e7eb}
+  .logo{width:32px;height:32px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#0f0;font-weight:900;box-shadow:0 0 10px #0f0}
+  .name{font-weight:800} .badge{margin-left:auto;background:#111;color:#0f0;padding:5px 12px;border-radius:20px;font-size:11px;border:1px solid #0f0}
+  #chat{position:relative;z-index:2;flex:1;overflow-y:auto;background:rgba(245,245,247,0.85);backdrop-filter:blur(4px);display:flex;flex-direction:column}
   .welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center}
-  .welcome-logo{width:90px;height:90px;background:#111;border-radius:28px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-  .welcome-logo span{color:white;font-weight:900;font-size:14px}
+  .welcome-logo{width:90px;height:90px;background:#111;border-radius:28px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 0 20px #0f0;border:1px solid #0f0}
+  .welcome-logo span{color:#0f0;font-weight:900;font-size:14px;text-shadow:0 0 8px #0f0}
   .welcome h1{font-size:32px;font-weight:900;margin-bottom:10px}
-  .welcome p{color:#6b7280;max-width:480px;margin-bottom:24px;line-height:1.5}
+  .welcome p{color:#374151;max-width:480px;margin-bottom:24px;line-height:1.5;font-weight:500}
   .suggestions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:600px}
-  .chip{background:white;border:1px solid #e5e7eb;padding:12px 18px;border-radius:24px;font-size:14px;cursor:pointer}
-  .chip:hover{background:#111;color:white}
+  .chip{background:white;border:1px solid #0f0;padding:12px 18px;border-radius:24px;font-size:14px;cursor:pointer}
+  .chip:hover{background:#111;color:#0f0}
   .msg{max-width:80%;padding:14px 18px;border-radius:20px;font-size:15px;margin:10px 20px;line-height:1.55;white-space:pre-wrap}
-  .user{align-self:flex-end;background:#111;color:white;border-bottom-right-radius:6px}
+  .user{align-self:flex-end;background:#111;color:#0f0;border:1px solid #0f0;border-bottom-right-radius:6px}
   .ai{align-self:flex-start;background:white;border:1px solid #e5e7eb;border-bottom-left-radius:6px}
-  #inputArea{padding:14px 20px;background:white;border-top:1px solid #e5e7eb;display:flex;gap:10px}
-  #prompt{flex:1;padding:12px 18px;border-radius:28px;border:1px solid #e5e7eb;background:#f9fafb;outline:none}
-  #sendBtn{width:44px;height:44px;border-radius:50%;border:none;background:#111;color:white;cursor:pointer}
+  #inputArea{position:relative;z-index:2;padding:14px 20px;background:rgba(255,255,255,0.92);backdrop-filter:blur(10px);border-top:1px solid #e5e7eb;display:flex;gap:10px}
+  #prompt{flex:1;padding:12px 18px;border-radius:28px;border:1px solid #0f0;background:#f9fafb;outline:none}
+  #sendBtn{width:44px;height:44px;border-radius:50%;border:none;background:#111;color:#0f0;cursor:pointer;border:1px solid #0f0}
 </style>
 </head>
 <body>
-<header><div class="logo">V1</div><div class="name">UPDATE V1</div><div class="badge">CRISTIANO</div></header>
+<canvas id="matrix"></canvas>
+<header><div class="logo">V1</div><div class="name">UPDATE V1</div><div class="badge">MATRIX • CRISTIANO</div></header>
 <div id="chat">
   <div class="welcome" id="welcomeScreen">
     <div class="welcome-logo"><span>UPDATE V1</span></div>
     <h1>Bienvenido a UPDATE V1</h1>
-    <p>Inteligencia artificial de última generación, creada 100% por Esteban David Cervantes Ortiz. <br><br>¡Ajá, mi hermano! Bendiciones.</p>
+    <p>Inteligencia artificial creada 100% por Esteban David Cervantes Ortiz.<br><br>¡Ajá, mi hermano! Bendiciones.</p>
     <div class="suggestions">
       <div class="chip" onclick="usarSugerencia('¿Quién eres?')">🤔 ¿Quién eres?</div>
       <div class="chip" onclick="usarSugerencia('Hola')">👋 Hola</div>
-      <div class="chip" onclick="usarSugerencia('Macondo')">📚 Macondo</div>
+      <div class="chip" onclick="usarSugerencia('Que haces')">💬 Que haces</div>
     </div>
   </div>
 </div>
 <div id="inputArea"><input id="prompt" placeholder="Escribe, mi hermano..."><button id="sendBtn">↑</button></div>
 
 <script>
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize(); window.addEventListener('resize', resize);
+const letters = "01 UPDATEV1 ESTEBAN ";
+const fontSize = 14;
+let drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
+function drawMatrix(){
+  ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#0F0"; ctx.font = fontSize + "px monospace";
+  for(let i=0;i<drops.length;i++){
+    ctx.fillText(letters[Math.floor(Math.random()*letters.length)], i*fontSize, drops[i]*fontSize);
+    if(drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i]=0;
+    drops[i]++;
+  }
+}
+setInterval(drawMatrix, 33);
+
 const chatEl = document.getElementById('chat');
 const welcomeScreen = document.getElementById('welcomeScreen');
 const promptEl = document.getElementById('prompt');
 const sendBtn = document.getElementById('sendBtn');
 let primero = true;
 let historial = [];
-let ultimoTema = "";
 
 function usarSugerencia(t){ promptEl.value=t; enviar(); }
 function addMsg(tipo, txt){
   if(primero){ welcomeScreen.style.display='none'; primero=false; }
-  const div = document.createElement('div'); div.className=`msg ${tipo}`; div.textContent=txt;
-  chatEl.appendChild(div); chatEl.scrollTop=chatEl.scrollHeight; return div;
+  const d = document.createElement('div'); d.className=`msg ${tipo}`; d.textContent=txt;
+  chatEl.appendChild(d); chatEl.scrollTop=chatEl.scrollHeight; return d;
 }
 
 async function soloWikipedia(consulta){
-  let termino = consulta.replace(/^(que es|qué es|quien es|quién es|que significa|explícame|define)\s+/i,'').trim();
-  if(termino.length < 2) termino = consulta;
+  let termino = consulta.trim();
   try{
     const searchUrl = `https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(termino)}&format=json&origin=*`;
-    const searchRes = await fetch(searchUrl);
-    const searchData = await searchRes.json();
-    let tituloFinal = termino;
-    if(searchData.query && searchData.query.search.length > 0) tituloFinal = searchData.query.search[0].title;
-    const summaryUrl = `https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(tituloFinal)}`;
-    const summaryRes = await fetch(summaryUrl);
-    if(summaryRes.ok){
-      const data = await summaryRes.json();
-      if(data.extract) return data;
-    }
+    const s = await fetch(searchUrl); const data = await s.json();
+    let titulo = termino;
+    if(data.query && data.query.search.length > 0) titulo = data.query.search[0].title;
+    const url = `https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(titulo)}`;
+    const r = await fetch(url); if(r.ok){ const j = await r.json(); if(j.extract) return j; }
     return null;
   }catch(e){ return null; }
 }
 
 async function cerebro(entrada){
   const m = entrada.toLowerCase().trim();
-  historial.push(entrada);
+  const sinAcento = m.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  historial.push(m);
 
-  // === MENSAJE EXACTO QUE PEDISTE ===
-  if(m.includes("quien eres") || m.includes("quién eres") || m.includes("quien te creo") || m.includes("quién te creó") || m.includes("quien te hizo") || m.includes("qué eres")){
+  // 1. MENSAJE PROFESIONAL ¿QUIEN ERES?
+  if(sinAcento.includes("quien eres") || sinAcento.includes("quien te creo") || sinAcento.includes("que eres")){
     return `Soy una inteligencia artificial creada 100% por el increíble pensador e inteligente creador Esteban David Cervantes Ortiz.
 
 Soy UPDATE V1, una IA de última generación diseñada para ser rápida, útil y precisa. Fui desarrollada con un enfoque innovador, sin necesidad de claves API externas, sin descargas y con funcionamiento 100% local y estable.
@@ -93,44 +107,50 @@ Mi propósito es asistir, crear, resolver y acompañar ideas con la visión y el
 Estoy aquí para ayudarte en lo que necesites.`;
   }
 
-  if(m.includes("esteban") && m.includes("quien")){
-    return `Esteban David Cervantes Ortiz es el increíble pensador e inteligente creador de UPDATE V1. Es un joven visionario, innovador y creativo de Colombia, con una capacidad excepcional para crear tecnología y soluciones inteligentes. Él es el fundador y desarrollador 100% de esta inteligencia artificial.`;
-  }
+  // 2. DETECTOR DE CONVERSACIÓN - NO IR A WIKIPEDIA
+  const esConversacion = [
+    "que haces","q haces","ke haces","que estas haciendo","que mas","como estas","como vas",
+    "hola","ola","buenas","bendiciones","gracias","como te llamas","quien es esteban",
+    "estas bien","que cuentas","dime","cuentame","jajaja","jeje"
+  ].some(f => sinAcento === f || sinAcento.startsWith(f + " ") || sinAcento.includes(f));
 
-  // CONVERSACIÓN COSTEÑOL CRISTIANO
-  if(m === "hola" || m.includes("buenas") || m.includes("bendiciones")){
-    if(historial.length <= 2){
-      return `¡Ajá, mi hermano! ¡Bendiciones! ¡Qué alegría saludarte!
+  if(esConversacion){
+    if(sinAcento.includes("que haces") || sinAcento.includes("que estas haciendo")){
+      return `¡Ajá, mi hermano! ¡Bendiciones!
 
-Pilla pues, estoy aquí para servirte, gracias a Dios. ¿Cómo estás? ¿En qué te ayudo hoy?`;
-    } else {
-      return `¡Ajá, mi hermano! ¡De nuevo por aquí! Me alegra seguir conversando contigo.
+Aquí estoy, gracias a Dios, atento sirviéndote, mi hermano. Pilla pues, listo para ayudarte en lo que necesites.
 
-¿Seguimos con lo de ${ultimoTema ? ultimoTema : 'lo que estábamos hablando'} o me quieres preguntar otra cosita? Estoy atento, mi hermano. Bendiciones.`;
+¿Y tú qué haces, mi hermano? Cuéntame, seguimos conversando como familia.`;
     }
+    if(sinAcento.includes("como estas") || sinAcento.includes("como vas")){
+      return `¡Gracias a Dios bien, mi hermano! ¡Bendecido!
+
+Ajá, firme aquí sirviendo con alegría. ¿Y tú cómo vas, mi hermano? ¿Todo bien por casa?`;
+    }
+    if(sinAcento.includes("hola") || sinAcento.includes("buenas")){
+      return historial.length <= 2 ? `¡Ajá, mi hermano! ¡Bendiciones! ¡Qué alegría saludarte! Pilla pues, estoy aquí para servirte, gracias a Dios. ¿En qué te ayudo hoy?` : `¡Ajá, mi hermano! ¡De nuevo por aquí! Me alegra seguir charlando contigo. Bendiciones.`;
+    }
+    if(sinAcento.includes("gracias")){
+      return `¡Amén, mi hermano! Para servirte siempre, con la ayuda de Dios. ¡Bendiciones!`;
+    }
+    // Si no coincide exacto pero es conversación corta
+    return `¡Ajá, mi hermano! Te escucho. Me dijiste "${entrada}". Cuéntame más para seguir conversando bacano, mi hermano. Bendiciones.`;
   }
 
-  if(m.includes("como estas") || m.includes("cómo estás")){
-    return `¡Gracias a Dios bien, mi hermano! ¡Bendecido!
-
-Ajá, aquí estoy firme, sirviendo con alegría. ¿Y tú cómo vas? ¿Todo bien por casa? Cuéntame, mi hermano.`;
+  // 3. SI NO ES CONVERSACIÓN, AHÍ SÍ BUSCA EN WIKIPEDIA
+  const wiki = await soloWikipedia(entrada);
+  if(wiki){
+    return `¡Ajá, mi hermano! Pilla pues, sobre ${wiki.title}:\n\n${wiki.extract}\n\n¿Quieres que profundicemos más, mi hermano?`;
   }
 
-  // WIKIPEDIA CON TOQUE CRISTIANO
-  const dataWiki = await soloWikipedia(entrada);
-  if(dataWiki){
-    ultimoTema = dataWiki.title;
-    return `¡Ajá, mi hermano! Pilla pues, sobre ${dataWiki.title}:\n\n${dataWiki.extract}\n\n¿Quieres que profundicemos más, mi hermano? Seguimos conversando, bendiciones.`;
-  }
-
-  return `Recibí: "${entrada}"\n\nSoy UPDATE V1, creado por Esteban David Cervantes Ortiz, listo para ayudarte, mi hermano. Bendiciones.`;
+  return `Mi hermano, no encontré "${entrada}" clarito. Escríbeme solo la palabra clave si quieres que lo busque en Wikipedia, o seguimos conversando, bendiciones.`;
 }
 
 async function enviar(){
-  const texto = promptEl.value.trim(); if(!texto) return;
-  addMsg("user", texto); promptEl.value="";
+  const t = promptEl.value.trim(); if(!t) return;
+  addMsg("user", t); promptEl.value="";
   const b = addMsg("ai", "Un momentico, mi hermano...");
-  b.textContent = await cerebro(texto);
+  b.textContent = await cerebro(t);
 }
 sendBtn.onclick=enviar;
 promptEl.onkeydown=e=>{ if(e.key==='Enter') enviar(); };
