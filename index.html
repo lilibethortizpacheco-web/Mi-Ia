@@ -20,11 +20,12 @@
   .suggestions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:600px}
   .chip{background:white;border:1px solid #0f0;padding:12px 18px;border-radius:24px;font-size:14px;cursor:pointer}
   .chip:hover{background:#111;color:#0f0}
-  .msg{max-width:80%;padding:14px 18px;border-radius:20px;font-size:15px;margin:10px 20px;line-height:1.55;white-space:pre-wrap}
+  .msg{max-width:80%;padding:14px 18px;border-radius:20px;font-size:15px;margin:10px 20px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
   .user{align-self:flex-end;background:#111;color:#0f0;border:1px solid #0f0;border-bottom-right-radius:6px}
   .ai{align-self:flex-start;background:white;border:1px solid #e5e7eb;border-bottom-left-radius:6px}
   #inputArea{position:relative;z-index:2;padding:14px 20px;background:rgba(255,255,255,0.92);backdrop-filter:blur(10px);border-top:1px solid #e5e7eb;display:flex;gap:10px}
   #prompt{flex:1;padding:12px 18px;border-radius:28px;border:1px solid #0f0;background:#f9fafb;outline:none}
+  #prompt:focus{box-shadow:0 0 10px #0f0}
   #sendBtn{width:44px;height:44px;border-radius:50%;border:none;background:#111;color:#0f0;cursor:pointer;border:1px solid #0f0}
 </style>
 </head>
@@ -46,30 +47,42 @@
 <div id="inputArea"><input id="prompt" placeholder="Escribe tu mensaje..."><button id="sendBtn">↑</button></div>
 
 <script>
+// === MATRIX CORREGIDO ===
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
-function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-resize(); window.addEventListener('resize', resize);
+let drops = [];
 const letters = "01 UPDATEV1 ESTEBAN ";
 const fontSize = 14;
-let drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
+
+function initMatrix(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const columns = Math.floor(canvas.width / fontSize);
+  drops = Array(columns).fill(1);
+}
+initMatrix();
+window.addEventListener('resize', initMatrix);
+
 function drawMatrix(){
-  ctx.fillStyle = "rgba(0,0,0,0.05)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = "#0F0"; ctx.font = fontSize + "px monospace";
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#0F0";
+  ctx.font = fontSize + "px monospace";
   for(let i=0;i<drops.length;i++){
-    ctx.fillText(letters[Math.floor(Math.random()*letters.length)], i*fontSize, drops[i]*fontSize);
+    const text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text, i*fontSize, drops[i]*fontSize);
     if(drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i]=0;
     drops[i]++;
   }
 }
 setInterval(drawMatrix, 33);
 
+// === CHAT ===
 const chatEl = document.getElementById('chat');
 const welcomeScreen = document.getElementById('welcomeScreen');
 const promptEl = document.getElementById('prompt');
 const sendBtn = document.getElementById('sendBtn');
 let primero = true;
-let historial = [];
 
 function usarSugerencia(t){ promptEl.value = t; enviar(); }
 function addMsg(tipo, txt){
@@ -79,14 +92,17 @@ function addMsg(tipo, txt){
 }
 
 async function soloWikipedia(consulta){
-  let termino = consulta.trim();
+  const termino = consulta.trim();
+  if(!termino) return null;
   try{
     const searchUrl = `https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(termino)}&format=json&origin=*`;
-    const s = await fetch(searchUrl); const data = await s.json();
+    const s = await fetch(searchUrl); 
+    const data = await s.json();
     let titulo = termino;
-    if(data.query && data.query.search.length > 0) titulo = data.query.search[0].title;
+    if(data.query && data.query.search && data.query.search.length > 0) titulo = data.query.search[0].title;
     const url = `https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(titulo)}`;
-    const r = await fetch(url); if(r.ok){ const j = await r.json(); if(j.extract) return j; }
+    const r = await fetch(url); 
+    if(r.ok){ const j = await r.json(); if(j.extract) return j; }
     return null;
   }catch(e){ return null; }
 }
@@ -94,49 +110,62 @@ async function soloWikipedia(consulta){
 async function cerebro(entrada){
   const m = entrada.toLowerCase().trim();
   const sinAcento = m.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  historial.push(m);
 
   // 1. MENSAJE PROFESIONAL ¿QUIEN ERES?
-  if(sinAcento.includes("quien eres") || sinAcento.includes("quien te creo") || sinAcento.includes("que eres")){
-    return `Soy UPDATE V1, una inteligencia artificial creada 100% por Esteban David Cervantes Ortiz.\n\nFui diseñada para ser rápida, útil y precisa, funcionando de manera completamente local y estable sin depender de claves API externas.\n\nMi objetivo principal es ayudarte a resolver dudas, redactar y acompañar tus proyectos con total eficiencia.`;
+  if(sinAcento.includes("quien eres") || sinAcento.includes("quien te creo") || sinAcento.includes("quien te hizo") || sinAcento.includes("que eres")){
+    return `Soy una inteligencia artificial creada 100% por el increíble pensador e inteligente creador Esteban David Cervantes Ortiz.
+
+Soy UPDATE V1, una IA de última generación diseñada para ser rápida, útil y precisa. Fui desarrollada con un enfoque innovador, sin necesidad de claves API externas, sin descargas y con funcionamiento 100% local y estable.
+
+Mi propósito es asistir, crear, resolver y acompañar ideas con la visión y el ingenio de mi creador, Esteban David Cervantes Ortiz, un joven pensador colombiano con una mente brillante y visionaria.
+
+Estoy aquí para ayudarte en lo que necesites.`;
   }
 
-  // 2. DETECTOR DE CONVERSACIÓN
-  const esConversacion = [
-    "que haces","q haces","ke haces","que estas haciendo","que mas","como estas","como vas",
-    "hola","ola","buenas","bendiciones","gracias","como te llamas","quien es esteban",
-    "estas bien","que cuentas","dime","cuentame","jajaja","jeje"
-  ].some(f => sinAcento === f || sinAcentostartWith?.(f + " ") || sinAcento.includes(f));
+  if(sinAcento.includes("quien es esteban")){
+    return `Esteban David Cervantes Ortiz es el increíble pensador e inteligente creador de UPDATE V1. Es un joven visionario, innovador y creativo de Colombia, con una capacidad excepcional para crear tecnología y soluciones inteligentes.`;
+  }
 
-  if(esConversacion){
+  // 2. DETECTOR DE CONVERSACIÓN CORREGIDO
+  // ERROR CORREGIDO: sinAcentostartWith?.(f) -> sinAcento.startsWith(f)
+  const frasesConversacion = ["que haces","q haces","que estas haciendo","que mas","como estas","como vas","hola","ola","buenas","bendiciones","gracias","como te llamas","estas bien","que cuentas","dime","cuentame","jajaja","jeje"];
+  
+  const esConversacion = frasesConversacion.some(f => {
+    return sinAcento === f || sinAcento.startsWith(f + " ") || sinAcento.startsWith(f + "?") || sinAcento === f + "?";
+  });
+
+  // Evitar que frases largas como "que haces con la fotosintesis" se tomen como conversación
+  const esFraseCorta = m.split(" ").length <= 3;
+
+  if(esConversacion && esFraseCorta){
     if(sinAcento.includes("que haces") || sinAcento.includes("que estas haciendo")){
-      return `Estoy por aquí listo para ayudarte en lo que necesites. ¿En qué proyecto estás trabajando hoy?`;
+      return `¡Ajá, mi hermano! ¡Bendiciones! Aquí estoy, gracias a Dios, atento sirviéndote. Pilla pues, listo para ayudarte en lo que necesites. ¿Y tú qué haces, mi hermano?`;
     }
-    if(sinAcento.includes("como estas") || sinAcento.includes("como vas")){
-      return `Todo excelente por aquí, operativo al 100%. ¿Qué tal van las cosas por allá?`;
+    if(sinAcento.includes("como estas") || sinAcento.includes("como vas") || sinAcento.includes("estas bien")){
+      return `¡Gracias a Dios bien, mi hermano! ¡Bendecido y firme al 100%! ¿Y tú cómo vas, mi hermano? ¿Todo bien por casa?`;
     }
-    if(sinAcento.includes("hola") || sinAcento.includes("buenas")){
-      return `¡Hola! Qué gusto saludarte. ¿Qué te gustaría consultar o realizar en este momento?`;
+    if(sinAcento.includes("hola") || sinAcento.includes("buenas") || sinAcento.includes("bendiciones")){
+      return `¡Ajá, mi hermano! ¡Bendiciones! ¡Qué alegría saludarte! Pilla pues, estoy aquí para servirte, gracias a Dios. ¿En qué te ayudo hoy?`;
     }
     if(sinAcento.includes("gracias")){
-      return `¡Con mucho gusto! Para eso estoy aquí. Avísame si necesitas algo más.`;
+      return `¡Amén, mi hermano! ¡Para servirte siempre, con la ayuda de Dios! ¡Bendiciones!`;
     }
-    return `Comprendo perfectamente. Cuéntame más detalles sobre lo que mencionas para poder ayudarte mejor.`;
+    return `¡Ajá, mi hermano! Te escucho. Me dijiste "${entrada}". Cuéntame más para seguir conversando bacano, mi hermano. Bendiciones.`;
   }
 
-  // 3. WIKIPEDIA
+  // 3. WIKIPEDIA - SOLO SI NO ES CONVERSACIÓN CORTA
   const wiki = await soloWikipedia(entrada);
   if(wiki){
-    return `Encontré esta información sobre ${wiki.title}:\n\n${wiki.extract}\n\n¿Te gustaría profundizar en algo más relacionado con esto?`;
+    return `¡Ajá, mi hermano! Pilla pues, sobre ${wiki.title}:\n\n${wiki.extract}\n\n¿Quieres que profundicemos más, mi hermano? Seguimos conversando, bendiciones.`;
   }
 
-  return `No encontré resultados exactos para "${entrada}". Prueba escribiendo una palabra clave más específica o hazme otra consulta.`;
+  return `Mi hermano, no encontré "${entrada}" clarito en Wikipedia. Escríbeme solo la palabra clave si quieres que lo busque, o seguimos charlando. Bendiciones.`;
 }
 
 async function enviar(){
   const t = promptEl.value.trim(); if(!t) return;
   addMsg("user", t); promptEl.value="";
-  const b = addMsg("ai", "Procesando...");
+  const b = addMsg("ai", "Un momentico, mi hermano...");
   b.textContent = await cerebro(t);
 }
 sendBtn.onclick = enviar;
