@@ -35,7 +35,7 @@
   <div class="welcome" id="welcomeScreen">
     <div class="welcome-logo"><span>UPDATE V1</span></div>
     <h1>Bienvenido a UPDATE V1</h1>
-    <p>Inteligencia artificial creada 100% por Esteban David Cervantes Ortiz.<br><br>¡Ajá, mi hermano! Bendiciones.</p>
+    <p>Inteligencia artificial creada 100% por Esteban David Cervantes Ortiz.<br><br>¿En qué te puedo colaborar hoy?</p>
     <div class="suggestions">
       <div class="chip" onclick="usarSugerencia('¿Quién eres?')">🤔 ¿Quién eres?</div>
       <div class="chip" onclick="usarSugerencia('Hola')">👋 Hola</div>
@@ -43,7 +43,7 @@
     </div>
   </div>
 </div>
-<div id="inputArea"><input id="prompt" placeholder="Escribe, mi hermano..."><button id="sendBtn">↑</button></div>
+<div id="inputArea"><input id="prompt" placeholder="Escribe tu mensaje..."><button id="sendBtn">↑</button></div>
 
 <script>
 const canvas = document.getElementById('matrix');
@@ -71,7 +71,7 @@ const sendBtn = document.getElementById('sendBtn');
 let primero = true;
 let historial = [];
 
-function usarSugerencia(t){ promptEl.value=t; enviar(); }
+function usarSugerencia(t){ promptEl.value = t; enviar(); }
 function addMsg(tipo, txt){
   if(primero){ welcomeScreen.style.display='none'; primero=false; }
   const d = document.createElement('div'); d.className=`msg ${tipo}`; d.textContent=txt;
@@ -98,62 +98,49 @@ async function cerebro(entrada){
 
   // 1. MENSAJE PROFESIONAL ¿QUIEN ERES?
   if(sinAcento.includes("quien eres") || sinAcento.includes("quien te creo") || sinAcento.includes("que eres")){
-    return `Soy una inteligencia artificial creada 100% por el increíble pensador e inteligente creador Esteban David Cervantes Ortiz.
-
-Soy UPDATE V1, una IA de última generación diseñada para ser rápida, útil y precisa. Fui desarrollada con un enfoque innovador, sin necesidad de claves API externas, sin descargas y con funcionamiento 100% local y estable.
-
-Mi propósito es asistir, crear, resolver y acompañar ideas con la visión y el ingenio de mi creador, Esteban David Cervantes Ortiz, un joven pensador colombiano con una mente brillante y visionaria.
-
-Estoy aquí para ayudarte en lo que necesites.`;
+    return `Soy UPDATE V1, una inteligencia artificial creada 100% por Esteban David Cervantes Ortiz.\n\nFui diseñada para ser rápida, útil y precisa, funcionando de manera completamente local y estable sin depender de claves API externas.\n\nMi objetivo principal es ayudarte a resolver dudas, redactar y acompañar tus proyectos con total eficiencia.`;
   }
 
-  // 2. DETECTOR DE CONVERSACIÓN - NO IR A WIKIPEDIA
+  // 2. DETECTOR DE CONVERSACIÓN
   const esConversacion = [
     "que haces","q haces","ke haces","que estas haciendo","que mas","como estas","como vas",
     "hola","ola","buenas","bendiciones","gracias","como te llamas","quien es esteban",
     "estas bien","que cuentas","dime","cuentame","jajaja","jeje"
-  ].some(f => sinAcento === f || sinAcento.startsWith(f + " ") || sinAcento.includes(f));
+  ].some(f => sinAcento === f || sinAcentostartWith?.(f + " ") || sinAcento.includes(f));
 
   if(esConversacion){
     if(sinAcento.includes("que haces") || sinAcento.includes("que estas haciendo")){
-      return `¡Ajá, mi hermano! ¡Bendiciones!
-
-Aquí estoy, gracias a Dios, atento sirviéndote, mi hermano. Pilla pues, listo para ayudarte en lo que necesites.
-
-¿Y tú qué haces, mi hermano? Cuéntame, seguimos conversando como familia.`;
+      return `Estoy por aquí listo para ayudarte en lo que necesites. ¿En qué proyecto estás trabajando hoy?`;
     }
     if(sinAcento.includes("como estas") || sinAcento.includes("como vas")){
-      return `¡Gracias a Dios bien, mi hermano! ¡Bendecido!
-
-Ajá, firme aquí sirviendo con alegría. ¿Y tú cómo vas, mi hermano? ¿Todo bien por casa?`;
+      return `Todo excelente por aquí, operativo al 100%. ¿Qué tal van las cosas por allá?`;
     }
     if(sinAcento.includes("hola") || sinAcento.includes("buenas")){
-      return historial.length <= 2 ? `¡Ajá, mi hermano! ¡Bendiciones! ¡Qué alegría saludarte! Pilla pues, estoy aquí para servirte, gracias a Dios. ¿En qué te ayudo hoy?` : `¡Ajá, mi hermano! ¡De nuevo por aquí! Me alegra seguir charlando contigo. Bendiciones.`;
+      return `¡Hola! Qué gusto saludarte. ¿Qué te gustaría consultar o realizar en este momento?`;
     }
     if(sinAcento.includes("gracias")){
-      return `¡Amén, mi hermano! Para servirte siempre, con la ayuda de Dios. ¡Bendiciones!`;
+      return `¡Con mucho gusto! Para eso estoy aquí. Avísame si necesitas algo más.`;
     }
-    // Si no coincide exacto pero es conversación corta
-    return `¡Ajá, mi hermano! Te escucho. Me dijiste "${entrada}". Cuéntame más para seguir conversando bacano, mi hermano. Bendiciones.`;
+    return `Comprendo perfectamente. Cuéntame más detalles sobre lo que mencionas para poder ayudarte mejor.`;
   }
 
-  // 3. SI NO ES CONVERSACIÓN, AHÍ SÍ BUSCA EN WIKIPEDIA
+  // 3. WIKIPEDIA
   const wiki = await soloWikipedia(entrada);
   if(wiki){
-    return `¡Ajá, mi hermano! Pilla pues, sobre ${wiki.title}:\n\n${wiki.extract}\n\n¿Quieres que profundicemos más, mi hermano?`;
+    return `Encontré esta información sobre ${wiki.title}:\n\n${wiki.extract}\n\n¿Te gustaría profundizar en algo más relacionado con esto?`;
   }
 
-  return `Mi hermano, no encontré "${entrada}" clarito. Escríbeme solo la palabra clave si quieres que lo busque en Wikipedia, o seguimos conversando, bendiciones.`;
+  return `No encontré resultados exactos para "${entrada}". Prueba escribiendo una palabra clave más específica o hazme otra consulta.`;
 }
 
 async function enviar(){
   const t = promptEl.value.trim(); if(!t) return;
   addMsg("user", t); promptEl.value="";
-  const b = addMsg("ai", "Un momentico, mi hermano...");
+  const b = addMsg("ai", "Procesando...");
   b.textContent = await cerebro(t);
 }
-sendBtn.onclick=enviar;
-promptEl.onkeydown=e=>{ if(e.key==='Enter') enviar(); };
+sendBtn.onclick = enviar;
+promptEl.onkeydown = e => { if(e.key === 'Enter') enviar(); };
 </script>
 </body>
 </html>
