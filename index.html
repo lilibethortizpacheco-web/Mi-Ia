@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UPDATE V1 - By Esteban Cervantes Ortiz</title>
+<title>UPDATE V1 - Solo Wikipedia</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#f5f5f7;color:#111;display:flex;flex-direction:column;height:100vh}
@@ -28,20 +28,21 @@ header{padding:16px 20px;display:flex;align-items:center;gap:10px;background:whi
 </style>
 </head>
 <body>
-<header><div class="logo">V1</div><div class="name">UPDATE V1</div><div class="badge">ESTEBAN CERVANTES</div></header>
+<header><div class="logo">V1</div><div class="name">UPDATE V1</div><div class="badge">SOLO WIKIPEDIA</div></header>
 <div id="chat">
   <div class="welcome" id="welcomeScreen">
     <div class="welcome-logo"><span>UPDATE V1</span></div>
     <h1>UPDATE V1</h1>
-    <p>La IA creada 100% por Esteban David Cervantes Ortiz. Sin error 404 y responde de verdad.</p>
+    <p>Ahora solo uso Wikipedia. Respuestas reales, sin inventos.</p>
     <div class="suggestions">
       <div class="chip" onclick="usarSugerencia('¿Quién eres?')">🤔 ¿Quién eres?</div>
-      <div class="chip" onclick="usarSugerencia('Qué es Macondo')">📚 Qué es Macondo</div>
-      <div class="chip" onclick="usarSugerencia('Qué es la fotosíntesis')">🌱 Fotosíntesis</div>
+      <div class="chip" onclick="usarSugerencia('Qué es Macondo')">📚 Macondo</div>
+      <div class="chip" onclick="usarSugerencia('Gabriel García Márquez')">✍️ Gabo</div>
+      <div class="chip" onclick="usarSugerencia('Fotosíntesis')">🌱 Fotosíntesis</div>
     </div>
   </div>
 </div>
-<div id="inputArea"><input id="prompt" placeholder="Pregunta lo que sea a UPDATE V1..."><button id="sendBtn">↑</button></div>
+<div id="inputArea"><input id="prompt" placeholder="Pregunta lo que sea (buscaré en Wikipedia)..."><button id="sendBtn">↑</button></div>
 
 <script>
 const chatEl = document.getElementById('chat');
@@ -57,38 +58,69 @@ function addMsg(tipo, txt){
   chatEl.appendChild(div); chatEl.scrollTop=chatEl.scrollHeight; return div;
 }
 
-async function buscarWiki(termino){
+async function soloWikipedia(consulta){
+  // Limpia "que es", "quien es", etc
+  let termino = consulta.replace(/^(que es|qué es|quien es|quién es|que significa|qué significa|explícame|define|dime sobre|háblame de)\s+/i,'').trim();
+  if(termino.length < 2) termino = consulta;
+
   try{
-    const r = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(termino)}`);
-    if(r.ok){ const j = await r.json(); if(j.extract) return `${j.title}\n\n${j.extract}`; }
-  }catch(e){} return null;
+    // 1. Buscar el título correcto en Wikipedia
+    const searchUrl = `https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(termino)}&format=json&origin=*`;
+    const searchRes = await fetch(searchUrl);
+    const searchData = await searchRes.json();
+    
+    let tituloFinal = termino;
+    if(searchData.query && searchData.query.search.length > 0){
+      tituloFinal = searchData.query.search[0].title;
+    }
+
+    // 2. Traer el resumen
+    const summaryUrl = `https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(tituloFinal)}`;
+    const summaryRes = await fetch(summaryUrl);
+    
+    if(summaryRes.ok){
+      const data = await summaryRes.json();
+      if(data.extract){
+        return `${data.title}\n\n${data.extract}\n\nFuente: Wikipedia - ${data.content_urls ? data.content_urls.desktop.page : ''}\n\n— UPDATE V1, creado por Esteban David Cervantes Ortiz`;
+      }
+    }
+    return null;
+  }catch(e){
+    return null;
+  }
 }
-async function buscarIA(termino){
-  try{
-    const r = await fetch(`https://text.pollinations.ai/${encodeURIComponent('Responde en español claro: '+termino)}?model=openai`);
-    if(r.ok){ const t = await r.text(); if(t && t.length>20) return t; }
-  }catch(e){} return null;
-}
+
 async function cerebro(entrada){
   const m = entrada.toLowerCase().trim();
-  if(m.includes('quien eres') || m.includes('quién eres') || m.includes('quien te creo')){
+
+  // IDENTIDAD INTACTA
+  if(m.includes('quien eres') || m.includes('quién eres') || m.includes('quien te creo') || m.includes('quién te creó')){
     return `Soy una inteligencia artificial creada 100% por el increíble pensador e inteligente creador Esteban David Cervantes Ortiz.
 
-Soy UPDATE V1, una inteligencia artificial de última generación, diseñada desde cero para ser rápida, útil, precisa y 100% estable sin depender de claves externas.
+Soy UPDATE V1, una inteligencia artificial de última generación que ahora funciona exclusivamente con Wikipedia para dar respuestas 100% verificadas y reales, sin inventar información.
 
-Mi creador es un joven visionario colombiano que está revolucionando la tecnología con ingenio y disciplina. Mi misión es ayudarte a crear, aprender y resolver.`;
+Fui diseñada desde cero por Esteban David Cervantes Ortiz, un joven visionario colombiano.`;
   }
-  let limpio = entrada.replace(/^(que es|qué es|explícame|define)\s+/i,'').trim();
-  let wiki = await buscarWiki(limpio);
-  if(wiki) return wiki + "\n\n— UPDATE V1, creado por Esteban David Cervantes Ortiz";
-  let ia = await buscarIA(entrada);
-  if(ia) return ia + "\n\n— UPDATE V1";
-  return `Te explico sobre "${entrada}": Es un tema que puedo desarrollar con historia, ejemplos y puntos clave. Dame un poco más de detalle y te lo explico completo.\n\n— UPDATE V1, creado por Esteban David Cervantes Ortiz`;
+
+  // TODO LO DEMÁS SOLO WIKIPEDIA
+  const resultado = await soloWikipedia(entrada);
+  if(resultado){
+    return resultado;
+  } else {
+    return `Busqué "${entrada}" en Wikipedia y no encontré un resultado exacto.
+
+Intenta escribir solo la palabra clave, por ejemplo:
+- En vez de "Que es macondo" escribe "Macondo"
+- En vez de "Quien fue Gabriel García Márquez" escribe "Gabriel García Márquez"
+
+Soy UPDATE V1, creado por Esteban David Cervantes Ortiz, funcionando solo con Wikipedia.`;
+  }
 }
+
 async function enviar(){
   const texto = promptEl.value.trim(); if(!texto) return;
   addMsg('user', texto); promptEl.value='';
-  const b = addMsg('ai', 'UPDATE V1 pensando...');
+  const b = addMsg('ai', 'Buscando en Wikipedia...');
   const resp = await cerebro(texto);
   b.textContent = resp;
 }
