@@ -68,7 +68,10 @@ async function soloWikipedia(consulta){
     const summaryRes = await fetch(summaryUrl);
     if(summaryRes.ok){
       const data = await summaryRes.json();
-      if(data.extract) return `${data.title}\n\n${data.extract}\n\n— UPDATE V1, creado por Esteban David Cervantes Ortiz`;
+      if(data.extract){
+        // SOLO EL CONTENIDO, SIN FOOTER
+        return `${data.title}\n\n${data.extract}`;
+      }
     }
     return null;
   }catch(e){ return null; }
@@ -79,7 +82,7 @@ async function cerebro(entrada){
     return `Soy una inteligencia artificial creada 100% por el increíble pensador e inteligente creador Esteban David Cervantes Ortiz.`;
   }
   const resultado = await soloWikipedia(entrada);
-  return resultado || `Busqué "${entrada}" en Wikipedia y no encontré un resultado exacto. Intenta con solo la palabra clave.\n\n— UPDATE V1, creado por Esteban David Cervantes Ortiz`;
+  return resultado || `Busqué "${entrada}" en Wikipedia y no encontré un resultado exacto. Intenta con solo la palabra clave.`;
 }
 async function enviar(){
   const texto = promptEl.value.trim(); if(!texto) return;
