@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UPDATE V1</title>
+<title>UPDATE V1 - Costeñol Grueso</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#f5f5f7;color:#111;display:flex;flex-direction:column;height:100vh}
@@ -28,7 +28,7 @@ header{padding:16px 20px;display:flex;align-items:center;gap:10px;background:whi
 </style>
 </head>
 <body>
-<header><div class="logo">V1</div><div class="name">UPDATE V1</div><div class="badge">WIKIPEDIA</div></header>
+<header><div class="logo">V1</div><div class="name">UPDATE V1</div><div class="badge">¡AJÁ!</div></header>
 <div id="chat">
   <div class="welcome" id="welcomeScreen">
     <div class="welcome-logo"><span>UPDATE V1</span></div>
@@ -41,7 +41,7 @@ header{padding:16px 20px;display:flex;align-items:center;gap:10px;background:whi
     </div>
   </div>
 </div>
-<div id="inputArea"><input id="prompt" placeholder="Pregunta lo que sea..."><button id="sendBtn">↑</button></div>
+<div id="inputArea"><input id="prompt" placeholder="¡Habla, no joda!"><button id="sendBtn">↑</button></div>
 
 <script>
 const chatEl = document.getElementById('chat');
@@ -68,26 +68,58 @@ async function soloWikipedia(consulta){
     const summaryRes = await fetch(summaryUrl);
     if(summaryRes.ok){
       const data = await summaryRes.json();
-      if(data.extract){
-        // SOLO EL CONTENIDO, SIN FOOTER
-        return `${data.title}\n\n${data.extract}`;
-      }
+      if(data.extract) return `${data.title}\n\n${data.extract}`;
     }
     return null;
   }catch(e){ return null; }
 }
+function hablarCosteñolGrueso(texto){
+  const intros = [
+    "¡No joda, mi llave! Mira ve, ",
+    "¡Erda, compa! Te voy a decir la vaina como es, ",
+    "¡Ajá, mi hermano! Pilla pues, ",
+    "¡Uy, mondá! Te explico, ",
+    "¡Oye, culé vaina bacana, oíste! Mira, "
+  ];
+  const outros = [
+    "\n\n¡Culé vaina bacana, no joda! ¡Pura mondá bien hecha! 🔥",
+    "\n\n¿Viste? ¡No es cuento, es la mondá real!",
+    "\n\n¡Así es la vaina, compa! ¡Pura costa, oíste!",
+    "\n\n¡Erda, qué culé nota, ¿no?! ¡De la costa pa'l mundo!",
+    "\n\n¡No joda, eso es pa' que vea que en la costa si hay talento!"
+  ];
+  const intro = intros[Math.floor(Math.random()*intros.length)];
+  const outro = outros[Math.floor(Math.random()*outros.length)];
+  return intro + texto + outro;
+}
 async function cerebro(entrada){
   const m = entrada.toLowerCase().trim();
-  if(m.includes('quien eres') || m.includes('quién eres')){
-    return `Soy una inteligencia artificial creada 100% por el increíble pensador e inteligente creador Esteban David Cervantes Ortiz.`;
+  if(m.includes('quien eres') || m.includes('quién eres') || m.includes('quien te creo')){
+    return `¡No joda, mi llave! ¡Qué culé pregunta bacana!
+
+Yo soy UPDATE V1, una inteligencia artificial creada 100% por el increíble pensador e inteligente creador Esteban David Cervantes Ortiz.
+
+¡Ese man es un berraco, un costeño de pura cepa, inteligente, visionario y echado pa' lante! ¡El man se fajó y creó esta mondá desde cero, sin copiarle a nadie, oíste!
+
+¡Esa mondá quedó bacana, no joda! ¡Pura costa, de Soledad pa' el mundo! ¡Culé talento el del man, erda! 🌊🔥`;
   }
   const resultado = await soloWikipedia(entrada);
-  return resultado || `Busqué "${entrada}" en Wikipedia y no encontré un resultado exacto. Intenta con solo la palabra clave.`;
+  if(resultado){
+    return hablarCosteñolGrueso(resultado);
+  } else {
+    return `¡No joda, mi llave! Busqué "${entrada}" en Wikipedia y no encontré un culo.
+
+¡No te enredes! Escribe solo la palabrita, sin tanto rodeo.
+
+Por ejemplo, en vez de "que es esa mondá de macondo" escribe solo "Macondo".
+
+¡Ajá, pilla pues, compa!`;
+  }
 }
 async function enviar(){
   const texto = promptEl.value.trim(); if(!texto) return;
   addMsg('user', texto); promptEl.value='';
-  const b = addMsg('ai', 'Buscando...');
+  const b = addMsg('ai', '¡Espérate ahí, no joda, estoy buscando...!');
   b.textContent = await cerebro(texto);
 }
 sendBtn.onclick=enviar;
